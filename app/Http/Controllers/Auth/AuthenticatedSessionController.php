@@ -22,13 +22,25 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        $request->authenticate();
+        // Ganti validasi dari 'email' menjadi 'nis'
+        $request->validate([
+            'nis' => ['required', 'string'],
+            'password' => ['required', 'string'],
+        ]);
 
-        $request->session()->regenerate();
+        // Coba otentikasi menggunakan NIS
+        $credentials = ['nis' => $request->nis, 'password' => $request->password];
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->intended(route('voting.index', absolute: false));
+        }
+
+        return back()->withErrors([
+            'nis' => 'NIS atau password yang Anda masukkan salah.',
+        ])->onlyInput('nis');
     }
 
     /**

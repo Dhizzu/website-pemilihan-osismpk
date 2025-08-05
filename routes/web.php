@@ -1,33 +1,29 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ImportController;
-use App\Http\Controllers\VotingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VotingController;
+use Illuminate\Support\Facades\Route;
 
+// Redirect dari halaman utama ke halaman login
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
+// Grup route yang memerlukan autentikasi
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [VotingController::class, 'dashboard'])->name('dashboard');
-    Route::get('/vote-selection', [VotingController::class, 'selectionPage'])->name('vote.selection');
-    Route::get('/vote-osis', [VotingController::class, 'showOsisCandidates'])->name('vote.osis');
-    Route::get('/vote-mpk', [VotingController::class, 'showMpkCandidates'])->name('vote.mpk');
-    Route::post('/vote', [VotingController::class, 'processVote'])->name('vote.process');
-
-    Route::get('/import-users', [ImportController::class, 'showImportForm'])->name('users.import.form');
-    Route::post('/import-users', [ImportController::class, 'importUsers'])->name('users.import');
-});
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
+    // Route untuk voting
+    Route::get('/vote', [VotingController::class, 'index'])->name('voting.index');
+    Route::post('/vote', [VotingController::class, 'store'])->name('voting.store');
+    
+    // Route untuk melihat hasil voting
+    Route::get('/results', [VotingController::class, 'results'])->name('voting.results');
+    
+    // Route untuk halaman profil, bisa dihapus jika tidak diperlukan
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Sertakan route autentikasi dari Laravel Breeze
+// Kita akan memodifikasi file ini untuk menghapus fitur registrasi
 require __DIR__.'/auth.php';

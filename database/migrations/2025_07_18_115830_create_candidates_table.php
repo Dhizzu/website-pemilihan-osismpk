@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('candidates', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('class');
-            $table->string('position');
-            $table->text('description')->nullable();
-            $table->string('photo')->nullable();
+            $table->string('nis')->unique();
+            $table->string('position'); // Contoh: 'Ketua OSIS', 'Ketua MPK'
+            $table->text('visi')->nullable();
+            $table->text('misi')->nullable();
+            $table->string('photo_path')->nullable();
             $table->timestamps();
         });
     }

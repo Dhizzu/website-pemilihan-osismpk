@@ -2,78 +2,62 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Vote;
 use App\Models\Candidate;
+use App\Models\Vote;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class VotingController extends Controller
 {
-    public function dashboard()
+    /**
+     * Tampilkan halaman voting dengan daftar kandidat.
+     */
+    public function index(): View|RedirectResponse
     {
-        return redirect()->route('vote.selection');
-    }
-
-    public function selectionPage()
-    {
-        $user = Auth::user();
-        return view('vote.selection', compact('user'));
-    }
-
-    public function showOsisCandidates()
-    {
-        $user = Auth::user();
-        if ($user->has_voted_osis) {
-            return redirect()->route('dashboard')->with('error', 'Anda sudah memilih calon Ketua OSIS');
+        // Cek apakah user sudah voting
+        if (Auth::user()->hasVoted()) {
+            return redirect()->route('voting.results');
         }
 
-        $candidates = Candidate::where('position', 'osis')->get();
-        return view('vote.osis', compact('candidates', 'user'));
+        $candidates = Candidate::all();
+        return view('voting.index', compact('candidates'));
     }
 
-    public function showMpkCandidates()
-    {
-        $user = Auth::user();
-        if ($user->has_voted_mpk) {
-            return redirect()->route('dashboard')->with('error', 'Anda sudah memilih calon Ketua MPK');
-        }
-
-        $candidates = Candidate::where('position', 'mpk')->get();
-        return view('vote.mpk', compact('candidates', 'user'));
-    }
-
-    public function processVote(Request $request)
+    /**
+     * Simpan hasil voting.
+     */
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'candidate_id' => 'required|exists:candidates,id',
-            'position' => 'required|in:osis,mpk'
         ]);
 
         $user = Auth::user();
-        $candidate = Candidate::find($request->candidate_id);
 
-        if ($request->position == 'osis' && $user->has_voted_osis) {
-            return redirect()->back()->with('error', 'Anda sudah memilih calon Ketua OSIS');
+        // Cek kembali apakah user sudah voting untuk mencegah duplikasi
+        if ($user->hasVoted()) {
+            return redirect()->route('voting.results');
         }
 
-        if  ($request->position == 'mpk' && $user->has_voted_mpk) {
-            return redirect()->back()->with('error', 'Anda sudah memilih calon Ketua MPK');
-        }
-
+        // Simpan vote baru
         Vote::create([
             'user_id' => $user->id,
-            'candidate_id' => $candidate->id,
-            'position' => $request->position
+            'candidate_id' => $request->candidate_id,
         ]);
 
-        if ($request->position == 'osis') {
-            $user->has_voted_osis = true;
-        } else {
-            $user->has_voted_mpk = true;
-        }
-        $user->save();
+        return redirect()->route('voting.results')->with('success', 'Terima kasih, suara Anda berhasil disimpan!');
+    }
 
-        return redirect()->route('dashboard')->with('success', 'Terima kasih, suara anda berhasil direkam!');
+    /**
+     * Tampilkan hasil voting.
+     */
+    public function results(): View
+    {
+        $candidates = Candidate::withCount('votes')->get();
+        $totalVotes = Vote::count();
+
+        return view('voting.results', compact('candidates', 'totalVotes'));
     }
 }
