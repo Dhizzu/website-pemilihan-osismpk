@@ -1,3 +1,4 @@
+<!-- Template layout utama aplikasi -->
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -13,22 +14,47 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+        <style>
+            [x-cloak] { display: none !important; }
+        </style>
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900">
+        <div class="min-h-screen">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            @if (isset($header))
+                <header class="bg-white dark:bg-gray-800 shadow-sm">
+                    <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>
-            @endisset
+            @endif
 
             <!-- Page Content -->
-            <main>
+            <main class="py-8">
+                @if (session('success'))
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+                        <div class="bg-secondary-500 text-white p-4 rounded-lg shadow-md flex items-center justify-between">
+                            <span>{{ session('success') }}</span>
+                            <button type="button" class="text-white hover:text-secondary-100 focus:outline-none" onclick="this.parentElement.style.display='none'">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                @endif
+                @if (session('error'))
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+                        <div class="bg-red-500 text-white p-4 rounded-lg shadow-md flex items-center justify-between">
+                            <span>{{ session('error') }}</span>
+                            <button type="button" class="text-white hover:text-red-100 focus:outline-none" onclick="this.parentElement.style.display='none'">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                @endif
                 {{ $slot }}
             </main>
         </div>

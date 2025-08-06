@@ -2,10 +2,16 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VotingController;
+use App\Http\Controllers\StudentImportController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Providers\RouteServiceProvider;
 
-// Redirect dari halaman utama ke halaman login
+// Redirect dari halaman utama
 Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect(RouteServiceProvider::HOME);
+    }
     return redirect()->route('login');
 });
 
@@ -22,6 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    
 });
 
 // Sertakan route autentikasi dari Laravel Breeze

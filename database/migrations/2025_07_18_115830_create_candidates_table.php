@@ -7,14 +7,14 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Jalankan migrasi.
      */
     public function up(): void
     {
         Schema::create('candidates', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('nis')->unique();
+            $table->string('nis')->unique(); // NIS kandidat
             $table->string('position'); // Contoh: 'Ketua OSIS', 'Ketua MPK'
             $table->text('visi')->nullable();
             $table->text('misi')->nullable();
@@ -24,7 +24,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Balikkan migrasi.
      */
     public function down(): void
     {

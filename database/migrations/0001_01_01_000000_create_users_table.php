@@ -7,15 +7,16 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Jalankan migrasi.
      */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique()->nullable(); // Kolom email tetap ada untuk reset password
-            $table->string('nis')->unique(); // Menggunakan NIS sebagai username
+            $table->string('email')->unique()->nullable(); // Kolom email tetap ada untuk fitur reset password (nullable)
+            $table->string('nis')->unique(); // Menggunakan NIS sebagai username unik
+            $table->string('class')->nullable(); // Kolom 'class' untuk data siswa
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
@@ -24,7 +25,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Balikkan migrasi.
      */
     public function down(): void
     {

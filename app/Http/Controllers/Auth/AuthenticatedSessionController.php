@@ -12,7 +12,7 @@ use Illuminate\View\View;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
+     * Tampilkan tampilan login.
      */
     public function create(): View
     {
@@ -20,31 +20,19 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request.
+     * Tangani permintaan otentikasi yang masuk.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(LoginRequest $request): RedirectResponse
     {
-        // Ganti validasi dari 'email' menjadi 'nis'
-        $request->validate([
-            'nis' => ['required', 'string'],
-            'password' => ['required', 'string'],
-        ]);
+        $request->authenticate();
 
-        // Coba otentikasi menggunakan NIS
-        $credentials = ['nis' => $request->nis, 'password' => $request->password];
+        $request->session()->regenerate();
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
-            $request->session()->regenerate();
-            return redirect()->intended(route('voting.index', absolute: false));
-        }
-
-        return back()->withErrors([
-            'nis' => 'NIS atau password yang Anda masukkan salah.',
-        ])->onlyInput('nis');
+        return redirect()->intended(route('voting.index', absolute: false));
     }
 
     /**
-     * Destroy an authenticated session.
+     * Hancurkan sesi yang diautentikasi.
      */
     public function destroy(Request $request): RedirectResponse
     {

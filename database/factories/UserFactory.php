@@ -27,6 +27,8 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'nis' => fake()->unique()->numerify('####'),
+            'nisn' => fake()->unique()->numerify('##########'),
+            'class' => fake()->randomElement(['X RPL', 'XI TKJ', 'XII AKL', 'XII BDP']),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
             'has_voted_osis' => false,
