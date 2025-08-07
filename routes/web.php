@@ -32,6 +32,4 @@ Route::middleware('auth')->group(function () {
     
 });
 
-// Sertakan route autentikasi dari Laravel Breeze
-// Kita akan memodifikasi file ini untuk menghapus fitur registrasi
 require __DIR__.'/auth.php';

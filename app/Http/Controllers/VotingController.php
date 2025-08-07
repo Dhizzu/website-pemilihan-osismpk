@@ -12,17 +12,26 @@ use Illuminate\Http\RedirectResponse;
 class VotingController extends Controller
 {
     /**
-     * Tampilkan halaman voting dengan daftar kandidat.
+     * Tampilkan halaman voting dengan daftar kandidat OSIS dan MPK.
      */
-    public function index(): View|RedirectResponse
+    public function index(): View
     {
-        // Cek apakah user sudah voting
-        if (Auth::user()->hasVoted()) {
-            return redirect()->route('voting.results');
-        }
+        $user = Auth::user();
 
-        $candidates = Candidate::all();
-        return view('voting.index', compact('candidates'));
+        // Get candidates grouped by position
+        $osisCandidates = Candidate::where('position', 'like', '%OSIS%')->get();
+        $mpkCandidates = Candidate::where('position', 'like', '%MPK%')->get();
+
+        // Check voting status
+        $hasVotedOSIS = $user->hasVotedOSIS();
+        $hasVotedMPK = $user->hasVotedMPK();
+
+        return view('voting.index', compact(
+            'osisCandidates',
+            'mpkCandidates',
+            'hasVotedOSIS',
+            'hasVotedMPK'
+        ));
     }
 
     /**
@@ -32,13 +41,24 @@ class VotingController extends Controller
     {
         $request->validate([
             'candidate_id' => 'required|exists:candidates,id',
+            'position' => 'required|in:OSIS,MPK',
         ]);
 
         $user = Auth::user();
+        $candidate = Candidate::findOrFail($request->candidate_id);
 
-        // Cek kembali apakah user sudah voting untuk mencegah duplikasi
-        if ($user->hasVoted()) {
-            return redirect()->route('voting.results');
+        // Validate position matches candidate
+        if (!str_contains($candidate->position, $request->position)) {
+            return redirect()->back()->with('error', 'Posisi kandidat tidak valid!');
+        }
+
+        // Check if user already voted for this position
+        if ($request->position === 'OSIS' && $user->hasVotedOSIS()) {
+            return redirect()->back()->with('error', 'Anda sudah memberikan suara untuk OSIS!');
+        }
+
+        if ($request->position === 'MPK' && $user->hasVotedMPK()) {
+            return redirect()->back()->with('error', 'Anda sudah memberikan suara untuk MPK!');
         }
 
         // Simpan vote baru
@@ -55,9 +75,13 @@ class VotingController extends Controller
      */
     public function results(): View
     {
+        $user = Auth::user();
         $candidates = Candidate::withCount('votes')->get();
         $totalVotes = Vote::count();
 
-        return view('voting.results', compact('candidates', 'totalVotes'));
+        $hasVotedOSIS = $user->hasVotedOSIS();
+        $hasVotedMPK = $user->hasVotedMPK();
+
+        return view('voting.results', compact('candidates', 'totalVotes', 'hasVotedOSIS', 'hasVotedMPK'));
     }
 }

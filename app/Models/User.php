@@ -58,7 +58,31 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Cek apakah user sudah memberikan vote.
+     * Cek apakah user sudah memberikan vote untuk OSIS.
+     */
+    public function hasVotedOSIS(): bool
+    {
+        return $this->vote()
+            ->whereHas('candidate', function ($query) {
+                $query->where('position', 'like', '%OSIS%');
+            })
+            ->exists();
+    }
+
+    /**
+     * Cek apakah user sudah memberikan vote untuk MPK.
+     */
+    public function hasVotedMPK(): bool
+    {
+        return $this->vote()
+            ->whereHas('candidate', function ($query) {
+                $query->where('position', 'like', '%MPK%');
+            })
+            ->exists();
+    }
+
+    /**
+     * Cek apakah user sudah memberikan vote (legacy method).
      */
     public function hasVoted(): bool
     {
