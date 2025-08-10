@@ -10,29 +10,29 @@
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
-        <!-- NIS Input -->
+        <!-- NIS -->
         <div class="mb-4">
             <x-input-label for="nis" :value="__('NIS')" />
             <x-text-input id="nis" class="block mt-1 w-full" type="text" name="nis" :value="old('nis')" required autofocus autocomplete="username" />
             <x-input-error :messages="$errors->get('nis')" class="mt-2" />
         </div>
 
-        <!-- Password Input -->
+        <!-- Login Token -->
         <div class="mb-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            <x-input-label for="login_token" :value="__('Login Token')" />
+            <x-text-input id="login_token" class="block mt-1 w-full"
+                            type="text"
+                            name="login_token"
+                            required />
+            <x-input-error :messages="$errors->get('login_token')" class="mt-2" />
         </div>
 
         <!-- Remember Me Checkbox -->
         <div class="flex justify-between items-center mb-4">
-            <label for="remember_me" class="inline-flex items-center">
+            {{-- <label for="remember_me" class="inline-flex items-center">
                 <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
                 <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
+            </label> --}}
 
             @if (Route::has('password.request'))
                 <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">

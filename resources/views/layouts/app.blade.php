@@ -13,7 +13,7 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/css/aesthetic-elements-fixed.css', 'resources/js/app.js'])
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
         <style>
@@ -21,6 +21,26 @@
         </style>
     </head>
     <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900">
+        <!-- Aesthetic Background Elements -->
+        <div class="aesthetic-grid"></div>
+        <div class="aesthetic-blob-1"></div>
+        <div class="aesthetic-blob-2"></div>
+        <div class="aesthetic-overlay"></div>
+        
+        <!-- Floating Particles -->
+        <div class="aesthetic-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+
         <div class="min-h-screen">
             @include('layouts.navigation')
 

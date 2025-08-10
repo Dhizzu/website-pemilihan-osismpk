@@ -21,9 +21,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'nis', // Tambahkan 'nis'
-        'nisn', // Tambahkan 'nisn'
-        'class', // Tambahkan 'class'
+        'nis',
+        'nisn',
+        'class',
+        'login_token',
     ];
 
     /**

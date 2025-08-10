@@ -22,8 +22,8 @@ class CandidateFactory extends Factory
     public function definition(): array
     {
         return [
+            'candidate_number' => $this->faker->unique()->numberBetween(1, 100),
             'name' => $this->faker->name,
-            'nis' => $this->faker->unique()->numerify('####'),
             'position' => $this->faker->randomElement(['Ketua OSIS', 'Ketua MPK']),
             'visi' => $this->faker->sentence,
             'misi' => $this->faker->paragraph,

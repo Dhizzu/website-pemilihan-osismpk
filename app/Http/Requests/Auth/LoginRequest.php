@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +31,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'nis' => ['required', 'string'],
-            'password' => ['required', 'string'],
+            'login_token' => ['required', 'string'],
         ];
     }
 
@@ -43,14 +44,17 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        $credentials = $this->only('nis', 'password');
-        if (! Auth::attempt($credentials, $this->boolean('remember'))) {
+        $user = User::where('nis', $this->input('nis'))->first();
+
+        if (! $user || ! hash_equals($user->login_token, $this->input('login_token'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
                 'nis' => trans('auth.failed'),
             ]);
         }
+
+        Auth::login($user, $this->boolean('remember'));
 
         RateLimiter::clear($this->throttleKey());
     }
@@ -71,7 +75,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'nis' => trans('auth.throttle', [
+            'nisn' => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -83,6 +87,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('nis')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('nisn')).'|'.$this->ip());
     }
 }
