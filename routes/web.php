@@ -40,7 +40,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Admin routes - using new admin guard with rate limiting
-Route::middleware(['auth:admin', 'throttle:60,1'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['admin', 'throttle:60,1'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/results', [AdminController::class, 'results'])->name('results');
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
