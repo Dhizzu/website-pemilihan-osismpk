@@ -27,19 +27,7 @@
         <div class="aesthetic-blob-2"></div>
         <div class="aesthetic-overlay"></div>
         
-        <!-- Floating Particles -->
-        <div class="aesthetic-particles">
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-        </div>
+        
 
         <div class="min-h-screen">
             @include('layouts.navigation')
