@@ -4,10 +4,11 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
+                <div class="shrink-0 flex items-center gap-2">
                     <a href="{{ route('voting.index') }}">
-                        <p class="text-2xl font-extrabold text-primary-600 dark:text-primary-400">E-Voting</p>
+                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                     </a>
+                    <p class="text-2xl font-extrabold text-primary-600 dark:text-primary-400 mr-2">E-Voting</p>
                 </div>
 
                 <!-- Navigation Links -->
@@ -15,17 +16,6 @@
                     <x-nav-link :href="route('voting.index')" :active="request()->routeIs('voting.index')">
                         {{ __('Voting') }}
                     </x-nav-link>
-                    @if(Auth::guard('admin')->check())
-                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                            {{ __('Admin Dashboard') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('admin.results')" :active="request()->routeIs('admin.results')">
-                            {{ __('Hasil') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.index')">
-                            {{ __('Manage Users') }}
-                        </x-nav-link>
-                    @endif
                 </div>
             </div>
 
@@ -35,7 +25,7 @@
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                                <div>{{ Auth::user()->name ?? 'User' }}</div>
+                                {{-- <div>{{ Auth::user()->name ?? 'User' }}</div> --}}
 
                                 <div class="ml-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -51,14 +41,6 @@
                             </x-dropdown-link>
 
                             <!-- Authentication -->
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <x-dropdown-link :href="route('logout')"
-                                        onclick="event.preventDefault();
-                                                    this.closest('form').submit();">
-                                    {{ __('Log Out') }}
-                                </x-dropdown-link>
-                            </form>
                         </x-slot>
                     </x-dropdown>
                 @else
@@ -87,18 +69,7 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('voting.index')" :active="request()->routeIs('voting.index')">
                 {{ __('Voting') }}
-            </x-responsive-nav-link>
-            @if(Auth::guard('admin')->check())
-                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                    {{ __('Admin Dashboard') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('admin.results')" :active="request()->routeIs('admin.results')">
-                    {{ __('Hasil') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.index')">
-                    {{ __('Manage Users') }}
-                </x-responsive-nav-link>
-            @endif
+            </x-responsive-nav-link>           
         </div>
 
         <!-- Responsive Settings Options -->
@@ -114,15 +85,7 @@
                         {{ __('Profile') }}
                     </x-responsive-nav-link>
 
-                    <!-- Authentication -->
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <x-responsive-nav-link :href="route('logout')"
-                                onclick="event.preventDefault();
-                                            this.closest('form').submit();">
-                            {{ __('Log Out') }}
-                        </x-responsive-nav-link>
-                    </form>
+                    <!-- Authentication -->                   
                 </div>
             @else
                 <div class="mt-3 space-y-1">

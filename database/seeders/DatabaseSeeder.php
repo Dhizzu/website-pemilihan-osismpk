@@ -12,7 +12,6 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            CandidateAndVoteResetSeeder::class,
             AdminSeeder::class,
         ]);
     }

@@ -8,6 +8,7 @@
     <div class="py-6 sm:py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 px-4">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6 sm:p-8">
+                <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                 <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Selamat Datang, {{ Auth::user()->name }}!</h3>
                 <p class="text-gray-700 dark:text-gray-300 mb-6">
                     Ini adalah halaman dashboard Anda. Di sini Anda dapat melihat ringkasan aktivitas dan informasi penting.

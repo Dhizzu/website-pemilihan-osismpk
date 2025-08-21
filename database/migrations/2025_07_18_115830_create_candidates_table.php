@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('candidates', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('nis')->unique(); // NIS kandidat
             $table->string('position'); // Contoh: 'Ketua OSIS', 'Ketua MPK'
             $table->text('visi')->nullable();
             $table->text('misi')->nullable();
